@@ -1,27 +1,35 @@
-const cors = require('cors');
 const express = require("express");
+const cors = require("cors");
 const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 const path = require("path");
-const { error } = require("console");
 
 const dbPath = path.join(__dirname, "database.db");
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+
 let db = null;
 
 const initializeDbAndServer = async () => {
   try {
-    db = await open({
-      filename: dbPath,
-      driver: sqlite3.Database,
-    });
+    db = await open({ filename: dbPath, driver: sqlite3.Database });
 
-   
-    app.listen(3000, () => {
-      console.log("Server started at http://localhost:3000");
+    await db.run(`
+      CREATE TABLE IF NOT EXISTS contact (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        phone TEXT NOT NULL,
+        address TEXT,
+        createdAt TEXT DEFAULT (datetime('now')) 
+      );
+    `);
+
+    app.listen(PORT, () => {
+      console.log(`Server started at http://localhost:${PORT}`);
     });
   } catch (e) {
     console.error(`Error: ${e.message}`);
@@ -31,66 +39,64 @@ const initializeDbAndServer = async () => {
 
 initializeDbAndServer();
 
-// API to Get All Contacts
+// Get All Contacts
 app.get("/contacts", async (req, res) => {
   try {
     const fetchAllContacts = `SELECT * FROM contact`;
-    const dbResponse = await db.all(fetchAllContacts);
-    res.send(dbResponse);
+    const contacts = await db.all(fetchAllContacts);
+    res.json(contacts);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-//API to add new contact
+// Add New Contact
 app.post("/contacts", async (req, res) => {
   try {
     const { name, email, phone, address } = req.body;
-    const insertQuery = `
-      INSERT INTO contact (name, email, phone, address, createdAt)
-      VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)`;
-    await db.run(insertQuery, [name, email, phone, address]);
-    res.status(200).json({ message: "Contact added successfully" });
+    const createdAt = new Date().toISOString(); // UTC format
+
+    const insertQuery = `INSERT INTO contact (name, email, phone, address, createdAt) VALUES (?, ?, ?, ?, ?)`;
+    await db.run(insertQuery, [name, email, phone, address, createdAt]);
+
+    res.status(201).json({ message: "Contact added successfully" });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-//update the existing contact
-app.put('/contacts/:id', async (req, res) => {
+// Update Contact
+app.put("/contacts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, phone, address } = req.body;
-    if (!name || !email || !phone || !address) {
-      return res.status(400).json({ error: "All fields (name, email, phone, address) are required" });
-    }
-    const updateQuery = `
-      UPDATE contact 
-      SET name = ?, email = ?, phone = ?, address = ?
-      WHERE id = ?;
-    `;
-    const dbResponse = await db.run(updateQuery, [name, email, phone, address, id]);
-    if (dbResponse.changes === 0) {
+
+    const updateQuery = `UPDATE contact SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?`;
+    const result = await db.run(updateQuery, [name, email, phone, address, id]);
+
+    if (result.changes === 0) {
       return res.status(404).json({ error: "Contact not found" });
     }
-    res.status(200).json({ message: "Contact Updated Successfully" });
+
+    res.status(200).json({ message: "Contact updated successfully" });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-//delete contact 
-app.delete('/contacts/:id',async(req,res)=>{
-  try{
-    const {id}=req.params
-    const deleteQuery=`DELETE from contact WHERE id=?;`;
-    await db.run(deleteQuery,[id])
-    res.status(200).json({message:"Contact Deleted Succesfully"})
+// Delete Contact
+app.delete("/contacts/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteQuery = `DELETE FROM contact WHERE id = ?`;
+    await db.run(deleteQuery, [id]);
+
+    res.status(200).json({ message: "Contact deleted successfully" });
   } catch (e) {
-    res.status(500).json({error:e.message})
+    res.status(500).json({ error: e.message });
   }
-  
-})
+});
+
 
 //fetch single contact based on id
 app.get('/contacts/:id',async(req,res)=>{
