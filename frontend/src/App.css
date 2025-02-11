@@ -1,0 +1,100 @@
+.App {
+  text-align: center;
+}
+
+.container {
+  width: 86%;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 50%;
+  
+}
+
+input {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+tr:hover{
+  background-color: rgb(236, 231, 231);
+}
+td button {
+  background-color: #007bff;
+  margin: 0 5px;
+}
+
+td button:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  margin-top: 8px;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+@media screen and (max-width:768px) {
+  td button {
+    border: 1px solid #007bff;
+    color: #007bff;
+    background-color: transparent;
+    &:hover{
+      background-color: #007bff;
+      color: white;
+    }
+  }
+ .delete-btn{
+  border: 1px solid #dc3545;
+  color: #c82333;
+  background-color: transparent;
+  &:hover{
+    background-color: #dc3545;
+    color: white;
+  }
+ }
+}
