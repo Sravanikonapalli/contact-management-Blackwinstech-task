@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import "./App.css";
 import moment from "moment-timezone";
+import { MdEdit , MdDelete} from "react-icons/md";
 
 const API_URL = "https://contact-management-backend-w8r3.onrender.com/contacts";
 
@@ -127,8 +128,8 @@ class App extends Component {
                   <td>{contact.address}</td>
                   <td>{moment(contact.createdAt).tz("Asia/Kolkata").format("DD/MM/YYYY, hh:mm A")}</td>
                   <td>
-                    <button onClick={() => this.handleEdit(contact)}>Edit</button>
-                    <button className="delete-btn" onClick={() => this.handleDelete(contact.id)}>Delete</button>
+                    <button className="edit-btn" onClick={() => this.handleEdit(contact)}><MdEdit size={25}/></button>
+                    <button className="delete-btn" onClick={() => this.handleDelete(contact.id)}>< MdDelete size={25}/></button>
                   </td>
                 </tr>
               ))}
