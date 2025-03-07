@@ -69,9 +69,7 @@ td button {
 td button:hover {
   background-color: #0056b3;
 }
-.buttons{
-  display: flex;
-}
+
 .delete-btn {
   background-color: transparent;
   color:red;

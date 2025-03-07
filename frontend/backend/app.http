@@ -1,0 +1,13 @@
+GET http://localhost:3000/contacts
+
+##
+POST http://localhost:3000/contacts
+
+##
+PUT http://localhost:3000/contacts/:id 
+
+##
+DELETE http://localhost:3000/contacts/:id 
+
+##
+GET http://localhost:3000/contacts/:id
