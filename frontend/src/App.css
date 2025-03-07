@@ -71,34 +71,20 @@ td button:hover {
 }
 
 .delete-btn {
-  background-color: #dc3545;
+  background-color: transparent;
+  color:red;
   margin-top: 8px;
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
-}
-@media screen and (max-width:768px) {
-  td button {
-    border: 1px solid #007bff;
-    color: #007bff;
-    background-color: transparent;
-    &:hover{
-      background-color: #007bff;
-      color: white;
-    }
-  }
- .delete-btn{
-  border: 1px solid #dc3545;
-  color: #c82333;
   background-color: transparent;
-  &:hover{
-    background-color: #dc3545;
-    color: white;
-  }
- }
+  color:maroon;
 }
-
+.edit-btn{
+  background-color: transparent;
+  color:orange;
+  margin-top: 8px;
+} 
 .searchbar{
   position: absolute;
   right: 0;
