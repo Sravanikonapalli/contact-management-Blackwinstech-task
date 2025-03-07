@@ -127,7 +127,7 @@ class App extends Component {
                   <td>{contact.phone}</td>
                   <td>{contact.address}</td>
                   <td>{moment(contact.createdAt).tz("Asia/Kolkata").format("DD/MM/YYYY, hh:mm A")}</td>
-                  <td>
+                  <td className="buttons">
                     <button className="edit-btn" onClick={() => this.handleEdit(contact)}><MdEdit size={25}/></button>
                     <button className="delete-btn" onClick={() => this.handleDelete(contact.id)}>< MdDelete size={25}/></button>
                   </td>
